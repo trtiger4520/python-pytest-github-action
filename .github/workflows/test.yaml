@@ -12,6 +12,7 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v3
       - name: install requirements
+        id: install-requirements
         run: pip install -r requirements.txtt
       - name: run py test
         run: pytest --cov-report html:htmlcov --cov-report term --cov=project tests
@@ -20,9 +21,9 @@ jobs:
         with:
           name: test-report
           path: htmlcov/
-      - name: failure msg
-        if: failure()
-        run: echo "test failed, please check the test report"
+      - name: install requirements failure msg
+        if: failure() && steps.install-requirements.outcome == 'failure'
+        run: echo "install requirements failed, please check the requirements.txt file"
   
   deploy:
     runs-on: ubuntu-22.04
