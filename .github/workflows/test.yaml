@@ -13,9 +13,9 @@ jobs:
         uses: actions/checkout@v3
       - name: install requirements
         id: install-requirements
-        run: pip install -r requirements.txtt
+        run: pip install -r requirements.txt
       - name: run py test
-        run: pytest --cov-report html:htmlcov --cov-report term --cov=project tests
+        run: pytest2 --cov-report html:htmlcov --cov-report term --cov=project tests
       - name: upload test reports
         uses: actions/upload-artifact@v4
         with:
@@ -27,7 +27,6 @@ jobs:
   
   deploy:
     runs-on: ubuntu-22.04
-    if: failure()
     needs: test-code
     steps:
       - name: checkout code
