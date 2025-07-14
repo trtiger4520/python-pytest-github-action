@@ -8,14 +8,21 @@ on:
 jobs:
   test-code:
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, 3.10]
     steps:
       - name: checkout code
         uses: actions/checkout@v3
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '${{ matrix.python-version }}'
       - name: install requirements
         id: install-requirements
         run: pip install -r requirements.txt
       - name: run py test
-        run: pytest2 --cov-report html:htmlcov --cov-report term --cov=project tests
+        run: pytest --cov-report html:htmlcov --cov-report term --cov=project tests
       - name: upload test reports
         uses: actions/upload-artifact@v4
         with:
